@@ -8,33 +8,6 @@ import java.util.*;
  * @author Ben Whitehead
  */
 public final class Utils {
-    static Map<String, List<String>> parseArgs(@NotNull final String[] args) {
-        final LinkedHashMap<String, List<String>> map = new LinkedHashMap<>();
-        for (int i = 0; i < args.length; i++) {
-            final String arg = args[i];
-            switch (arg) {
-                case "-":
-                    appendToMultiMap(map, "in", "system.in");
-                    break;
-                case "-f":
-                case "--file":
-                    final String filename = args[i+1];
-                    i++;
-                    appendToMultiMap(map, "files", filename);
-                    break;
-                default:
-                    appendToMultiMap(map, "props", arg);
-                    break;
-            }
-        }
-        return map;
-    }
-
-    static <A extends Comparable> TreeSet<A> newTreeSet(@NotNull final Collection<A> collection) {
-        final TreeSet<A> retVal = new TreeSet<>();
-        retVal.addAll(collection);
-        return retVal;
-    }
 
     static void appendToMultiMap(@NotNull final Map<String, List<String>> map, @NotNull final String key, @NotNull final String newValue) {
         final List<String> list = getOrElse(map, key, new ArrayList<String>());
@@ -64,31 +37,9 @@ public final class Utils {
     }
 
     @NotNull
-    public static <T extends Comparable<T>> List<T> sortedList(@NotNull final Collection<T> iter) {
-        final List<T> ts = newArrayList(iter);
-        Collections.sort(ts);
-        return ts;
-    }
-
-    @NotNull
-    public static <T> List<T> sortedList(@NotNull final Collection<T> iter, @NotNull final Comparator<T> comparator) {
-        final List<T> ts = newArrayList(iter);
-        Collections.sort(ts, comparator);
-        return ts;
-
-    }
-
-    @NotNull
     public static <T> ArrayList<T> newArrayList(@NotNull final T e) {
         final ArrayList<T> list = new ArrayList<>();
         list.add(e);
-        return list;
-    }
-
-    @NotNull
-    public static <T> ArrayList<T> newArrayList(@NotNull final Collection<T> e) {
-        final ArrayList<T> list = new ArrayList<>();
-        list.addAll(e);
         return list;
     }
 
