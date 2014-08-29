@@ -3,10 +3,7 @@ package io.github.benwhitehead.util.props;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.github.benwhitehead.util.props.Utils.*;
 
@@ -30,13 +27,13 @@ public final class Main {
         ) {
             props.run();
         } catch (IOException ioe) {
-            System.err.print("props: ");
+            System.err.print(String.format("%s: ", Props.NAME));
             System.err.println(ioe.getMessage());
             System.exit(1);
         } catch (ExitException ee) {
             System.exit(ee.status);
         } catch (IllegalArgumentException iae) {
-            System.err.print("props: ");
+            System.err.print(String.format("%s: ", Props.NAME));
             System.err.println(iae.getMessage());
             usage();
             System.exit(2);
@@ -58,7 +55,7 @@ public final class Main {
     }
 
     static void usage() {
-        System.out.println("Usage: props [--file <in>|-] [\"key=value\" | [ \"key2=value2\"]]");
+        System.out.println("Usage: " + Props.NAME + " [--file <in>|-] [\"key=value\" | [ \"key2=value2\"]]");
         System.out.println();
         System.out.println("       -h | --help        Print this help");
         System.out.println();
@@ -66,11 +63,35 @@ public final class Main {
         System.out.println();
         System.out.println("       -                  Read properties from stdin");
         System.out.println();
+        System.out.println("       --version          Prints version and jvm info");
+        System.out.println();
     }
 
     static void usageAndExit() {
         usage();
         throw new ExitException(2);
+    }
+
+    static void version() {
+        System.out.println(Props.NAME + " " + Props.VERSION);
+        System.out.println("Copyright (C) 2014 Ben Whitehead");
+        System.out.println("License: Apache License v2.0");
+
+        System.out.println();
+
+        final Properties sp = System.getProperties();
+        System.out.printf("java version \"%s\"%n", sp.getProperty("java.version"));
+        System.out.printf("%s%n", sp.getProperty("java.runtime.name"));
+        System.out.printf("%s (build %s, %s)%n",
+                sp.getProperty("java.vm.name"),
+                sp.getProperty("java.vm.version"),
+                sp.getProperty("java.vm.info")
+        );
+    }
+
+    static void versionAndExit() {
+        version();
+        throw new ExitException(0);
     }
 
     static ParsedArgs parseArgs(@NotNull final String[] args) {
@@ -93,6 +114,8 @@ public final class Main {
                     i++;
                     appendToMultiMap(map, "files", filename);
                     break;
+                case "--version":
+                    versionAndExit();
                 default:
                     appendToMultiMap(map, "props", arg);
                     break;
@@ -148,6 +171,4 @@ public final class Main {
         @Override
         public void close() throws IOException { /*no-op*/ }
     }
-
-
 }

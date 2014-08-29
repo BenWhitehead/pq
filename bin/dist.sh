@@ -8,3 +8,4 @@ OF=${TARGET}/props
 
 cat props.sh ${TARGET}/java-props-*.jar > ${OF}
 chmod +x ${OF}
+echo "New executable at $OF"
