@@ -15,10 +15,9 @@ import static io.github.benwhitehead.util.props.Utils.*;
  */
 public final class Main {
 
-    public static final List<String> emptyStringList = Collections.emptyList();
+    private static final List<String> emptyStringList = Collections.emptyList();
 
     public static void main(@NotNull final String[] args) {
-
         try (
                 final ParsedArgs params = parseArgs(args);
                 final Tuple2<String, Reader> t = getInputStream(params.get());
@@ -30,12 +29,17 @@ public final class Main {
                 )
         ) {
             props.run();
-        } catch (FileNotFoundException ioe) {
-            ioe.printStackTrace();
         } catch (IOException ioe) {
-            ioe.printStackTrace(); // TODO: Cleanup
+            System.err.print("props: ");
+            System.err.println(ioe.getMessage());
+            System.exit(1);
         } catch (ExitException ee) {
             System.exit(ee.status);
+        } catch (IllegalArgumentException iae) {
+            System.err.print("props: ");
+            System.err.println(iae.getMessage());
+            usage();
+            System.exit(2);
         }
     }
 
@@ -118,7 +122,7 @@ public final class Main {
         }
     }
 
-    private static final class ParsedArgs implements Closeable {
+    static final class ParsedArgs implements Closeable {
         @NotNull
         private final MyCloseable<Map<String, List<String>>> map;
         ParsedArgs(final Map<String, List<String>> map) {
@@ -133,7 +137,7 @@ public final class Main {
         public void close() throws IOException { map.close(); }
     }
 
-    private static final class MyCloseable<T> implements Closeable {
+    static final class MyCloseable<T> implements Closeable {
         @NotNull
         private final T val;
 

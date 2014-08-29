@@ -9,6 +9,9 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * @author Ben Whitehead
+ */
 public class PropsTest {
 
     @Test

@@ -6,6 +6,9 @@ import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * @author Ben Whitehead
+ */
 public final class Props implements Closeable {
     static String VERSION;
     static {
@@ -14,7 +17,7 @@ public final class Props implements Closeable {
             sys.load(new InputStreamReader(Props.class.getResourceAsStream("/build.properties")));
             VERSION = sys.getProperty("version");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 

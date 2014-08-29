@@ -11,6 +11,9 @@ import java.util.Map;
 import static io.github.benwhitehead.util.props.Utils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * @author Ben Whitehead
+ */
 public class UtilsTest {
 
     @Test
