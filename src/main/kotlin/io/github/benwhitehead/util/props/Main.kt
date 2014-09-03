@@ -4,11 +4,11 @@ import java.io.IOException
 import java.util.ArrayList
 import java.io.FileNotFoundException
 import java.io.Closeable
-import java.util.LinkedHashMap
 import java.io.InputStreamReader
 import java.io.FileReader
 import java.io.Reader
 import java.io.OutputStreamWriter
+import java.util.HashMap
 
 /**
  * @author Ben Whitehead
@@ -19,11 +19,11 @@ fun main(args: Array<String>) {
     try {
         parseArgs(args).use { params ->
             getInputStream(params.get()).use { pair ->
-                val t = pair.value
+                val (name, reader) = pair.value
                 Props(
-                        t.first,
+                        name,
                         params.get().getOrElse("props", { ArrayList() }),
-                        t.second,
+                        reader,
                         OutputStreamWriter(System.out)
                 ).use { props ->
                     props.run()
@@ -64,7 +64,7 @@ fun parseArgs(args: Array<String>): ParsedArgs {
     if (args.size == 0) {
         usageAndExit()
     }
-    val map = LinkedHashMap<String, ArrayList<String>>()
+    val map: MutableMap<String, MutableList<String>> = HashMap()
     var i = 0
     while (i < args.size) {
         val arg = args[i]
@@ -73,23 +73,28 @@ fun parseArgs(args: Array<String>): ParsedArgs {
                 usageAndExit()
             }
             "-" -> {
-                map.getOrElse("in", { ArrayList() }).add("system.in")
+                map.multimapUpdate("in", "system.in", { ArrayList() })
             }
             "-f", "--file" -> {
-                val filename = args[i + 1]
-                i++
-                map.getOrElse("files", { ArrayList() }).add(filename)
+                val filename = args[++i]
+                map.multimapUpdate("files", filename, { ArrayList() })
             }
             "--version" -> {
                 versionAndExit()
             }
             else -> {
-                map.getOrElse("props", { ArrayList() }).add(arg)
+                map.multimapUpdate("props", arg, { ArrayList() })
             }
         }
         i++
     }
     return ParsedArgs(map)
+}
+
+private inline fun <K, V> MutableMap<K, MutableList<V>>.multimapUpdate(key: K, value: V, default: () -> MutableList<V>) {
+    val list = this.getOrElse(key, default)
+    list.add(value)
+    this.put(key, list)
 }
 
 fun usage() {
@@ -137,16 +142,15 @@ class ParsedArgs(map: Map<String, List<String>>) : Closeable {
 class MyCloseable<T>(val value: T) : Closeable {
     throws(javaClass<IOException>())
     override fun close() {
-        if (value is Closeable) {
-            value.close()
-        } else if (value is Pair<*, *>) {
-            val first = value.second
-            if (first is Closeable) {
-                first.close()
-            }
-            val second = value.second
-            if (second is Closeable) {
-                second.close()
+        close(value)
+    }
+
+    private fun close(t: Any) {
+        when (t) {
+            is Closeable -> t.close()
+            is Pair<*, *> -> {
+                close(t.first!!)
+                close(t.second!!)
             }
         }
     }
