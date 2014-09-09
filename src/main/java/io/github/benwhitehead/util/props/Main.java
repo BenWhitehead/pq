@@ -56,13 +56,9 @@ public final class Main {
 
     static void usage() {
         System.out.println("Usage: " + Props.NAME + " [--file <in>|-] [\"key=value\" | [ \"key2=value2\"]]");
-        System.out.println();
         System.out.println("       -h | --help        Print this help");
-        System.out.println();
         System.out.println("       -f | --file        Specify the properties files to read");
-        System.out.println();
         System.out.println("       -                  Read properties from stdin");
-        System.out.println();
         System.out.println("       --version          Prints version and jvm info");
         System.out.println();
     }
