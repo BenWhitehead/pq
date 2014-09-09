@@ -20,6 +20,7 @@ Usage: pq [--file <in>|-] ["key=value" | [ "key2=value2"]]
 ### Reading properties
 Properties can be read either from a specified file using `-f / --file` or from `stdin` by passing `-`.
 The priority used to determine the input source is as follows:
+
 1. if `-` is passed `stdin` will be used
 2. if no `-` then the first `-f / --file` arg will be used
 3. if no input can be detected the app will exit
