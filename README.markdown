@@ -8,6 +8,9 @@ Using tools like `sed` or `awk` when dealing with properties can sometimes lead 
 a file that isn't able to be correctly loaded by the Java Properties class, this tool aims
 to fix that by making it easy to edit Java Properties files on the command line.
 
+## Requirements
+`pq`'s only system dependency is a Java JRE >= 1.7
+
 ## Usage
 ```
 Usage: pq [--file <in>|-] ["key=value" | [ "key2=value2"]]
