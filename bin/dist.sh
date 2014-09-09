@@ -4,8 +4,8 @@
 # @see: https://coderwall.com/p/ssuaxa
 
 TARGET=../target
-OF=${TARGET}/props
+OF=${TARGET}/pq
 
-cat props.sh ${TARGET}/java-props-*.jar > ${OF}
+cat props.sh ${TARGET}/pq-*.jar > ${OF}
 chmod +x ${OF}
 echo "New executable at $OF"

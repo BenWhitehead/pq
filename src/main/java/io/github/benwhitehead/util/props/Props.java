@@ -10,7 +10,7 @@ import java.util.Properties;
  * @author Ben Whitehead
  */
 public final class Props implements Closeable {
-    static String NAME = "props";
+    static String NAME = "pq";
     static String VERSION;
     static {
         try {
