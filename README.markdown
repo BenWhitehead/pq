@@ -35,6 +35,14 @@ on top of what was loaded.
 ### Output
 The resulting composite of the input and provided properties will then be written to stdout.
 
+## Example
+
+### Configuring Kafka's broker id
+```bash
+mv $KAFKA_HOME/conf/server.properties $KAFKA_HOME/conf/server.properties.orig
+pq --file $KAFKA_HOME/conf/server.properties "broker.id=185" > $KAFKA_HOME/conf/server.properties
+```
+
 ## Current limitations
 Right now `pq` only allow outputting to stdout. This means that in-place editing of properties
 files is currently not possible. This is intentional so that no data is ever unknowingly destroyed.
@@ -43,13 +51,13 @@ files is currently not possible. This is intentional so that no data is ever unk
 Simply redirecting the output of `pq` to the original file will not help as opening a file for
 writing destroys the contents of the file. For example, the following will not work:
 ```bash
-$ pq --file server.properties "port=8081" > server.properties
+pq --file server.properties "port=8081" > server.properties
 ```
 
 Instead you should first move the original file like this:
 ```bash
-$ mv server.properties server.properties.orig
-$ pq --file server.properties.orig "port=8081" > server.properties
+mv server.properties server.properties.orig
+pq --file server.properties.orig "port=8081" > server.properties
 ```
 
 ## Future features
