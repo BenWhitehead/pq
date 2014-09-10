@@ -19,6 +19,6 @@
 TARGET=../target
 OF=${TARGET}/pq
 
-cat props.sh ${TARGET}/pq-*.jar > ${OF}
+cat pq.sh ${TARGET}/pq-*.jar > ${OF}
 chmod +x ${OF}
 echo "New executable at $OF"
